@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Ping Pong</title>
+<link rel="stylesheet" href="../style.css">
+<style>canvas{display:block;margin:12px auto;background:#000;border-radius:8px}</style>
+</head>
+<body>
+<div class="container">
+  <h1>🏓 Ping Pong (W/S & ↑/↓)</h1>
+  <canvas id="p" width="600" height="400"></canvas>
+  <div><button onclick="start()">Start/Restart</button> <span id="pts">0 : 0</span></div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const canvas=document.getElementById('p'), ctx=canvas.getContext('2d');
+let paddle1={x:10,y:150,w:10,h:100}, paddle2={x:canvas.width-20,y:150,w:10,h:100}, ball={x:canvas.width/2,y:canvas.height/2,dx:4,dy:3,r:8}, score=[0,0], keys={};
+function start(){ paddle1.y=150; paddle2.y=150; ball.x=canvas.width/2; ball.y=canvas.height/2; score=[0,0]; document.getElementById('pts').textContent='0 : 0'; if(window._pongId) clearInterval(window._pongId); window._pongId=setInterval(loop,16);}
+document.addEventListener('keydown',e=>keys[e.key]=true); document.addEventListener('keyup',e=>keys[e.key]=false);
+function loop(){
+  // move paddles
+  if(keys['w'] && paddle1.y>0) paddle1.y-=6;
+  if(keys['s'] && paddle1.y+paddle1.h<canvas.height) paddle1.y+=6;
+  if(keys['ArrowUp'] && paddle2.y>0) paddle2.y-=6;
+  if(keys['ArrowDown'] && paddle2.y+paddle2.h<canvas.height) paddle2.y+=6;
+  // move ball
+  ball.x+=ball.dx; ball.y+=ball.dy;
+  if(ball.y+ball.r>canvas.height || ball.y-ball.r<0) ball.dy=-ball.dy;
+  // paddle collisions
+  if(ball.x - ball.r < paddle1.x + paddle1.w && ball.y > paddle1.y && ball.y < paddle1.y + paddle1.h){ ball.dx = -ball.dx; }
+  if(ball.x + ball.r > paddle2.x && ball.y > paddle2.y && ball.y < paddle2.y + paddle2.h){ ball.dx = -ball.dx; }
+  // scoring
+  if(ball.x < 0){ score[1]++; resetBall(); }
+  if(ball.x > canvas.width){ score[0]++; resetBall(); }
+  draw();
+}
+function resetBall(){ ball.x=canvas.width/2; ball.y=canvas.height/2; ball.dx = -ball.dx; document.getElementById('pts').textContent=score[0]+' : '+score[1]; }
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.fillStyle='white'; ctx.fillRect(paddle1.x,paddle1.y,paddle1.w,paddle1.h); ctx.fillRect(paddle2.x,paddle2.y,paddle2.w,paddle2.h);
+  ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2); ctx.fill();
+}
+start();
+</script>
+</body>
+</html>

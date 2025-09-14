@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Typing Speed Test</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="container">
+  <h1>⌨️ Typing Speed Test</h1>
+  <p id="prompt">The quick brown fox jumps over the lazy dog.</p>
+  <textarea id="input" rows="5" style="width:90%"></textarea>
+  <div style="margin-top:8px">
+    <button onclick="start()">Start</button>
+    <button onclick="finish()">Finish</button>
+  </div>
+  <div id="out" style="margin-top:10px"></div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+let startTime=0;
+function start(){ document.getElementById('input').value=''; document.getElementById('input').focus(); startTime=Date.now(); document.getElementById('out').textContent='Timer started'; }
+function finish(){
+  const text=document.getElementById('input').value.trim();
+  if(!startTime){ alert('Click Start first'); return; }
+  const seconds=(Date.now()-startTime)/1000;
+  const words=text.split(/\s+/).filter(Boolean).length;
+  const wpm = Math.round(words/(seconds/60));
+  const accuracy = calcAccuracy(text, document.getElementById('prompt').textContent);
+  document.getElementById('out').textContent=`Time: ${seconds.toFixed(1)}s | WPM: ${wpm} | Accuracy: ${accuracy}%`;
+  startTime=0;
+}
+function calcAccuracy(a,b){
+  const len=Math.max(a.length,b.length);
+  let match=0;
+  for(let i=0;i<len;i++) if(a[i]===b[i]) match++;
+  return Math.round((match/len)*100)||0;
+}
+</script>
+</body>
+</html>

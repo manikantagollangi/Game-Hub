@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Breakout</title>
+<link rel="stylesheet" href="../style.css">
+<style>canvas{display:block;margin:12px auto;background:#000;border-radius:8px}</style>
+</head>
+<body>
+<div class="container">
+  <h1>🟦 Breakout</h1>
+  <canvas id="b" width="480" height="320"></canvas>
+  <div><button onclick="start()">Start/Restart</button> <span id="sc">Score: 0</span></div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const canvas=document.getElementById('b'), ctx=canvas.getContext('2d');
+let ball, paddle, bricks, score, id;
+function init(){
+  ball={x:canvas.width/2,y:canvas.height-30,dx:3,dy:-3,r:8};
+  paddle={w:75,h:10,x:(canvas.width-75)/2};
+  bricks=[];
+  const rows=3, cols=5;
+  for(let r=0;r<rows;r++){
+    bricks[r]=[];
+    for(let c=0;c<cols;c++) bricks[r][c]={x: c* (75+10) + 35, y: r*(20+10)+30, w:75,h:20,alive:true};
+  }
+  score=0; document.getElementById('sc').textContent='Score: 0';
+  if(id) clearInterval(id); id=setInterval(loop,16);
+}
+document.addEventListener('mousemove', e=> {
+  const rect=canvas.getBoundingClientRect();
+  const mx=e.clientX-rect.left;
+  paddle.x = Math.min(Math.max(mx - paddle.w/2, 0), canvas.width-paddle.w);
+});
+function loop(){
+  // move
+  ball.x+=ball.dx; ball.y+=ball.dy;
+  // collisions
+  if(ball.x+ball.dx>canvas.width-ball.r||ball.x+ball.dx<ball.r) ball.dx=-ball.dx;
+  if(ball.y+ball.dy<ball.r) ball.dy=-ball.dy;
+  else if(ball.y+ball.dy>canvas.height-ball.r - paddle.h){
+    if(ball.x > paddle.x && ball.x < paddle.x + paddle.w) ball.dy = -ball.dy;
+    else { clearInterval(id); alert('Game Over! Score: '+score); }
+  }
+  // brick collisions
+  for(let r=0;r<bricks.length;r++){
+    for(let c=0;c<bricks[r].length;c++){
+      const br=bricks[r][c];
+      if(br.alive && ball.x>br.x && ball.x<br.x+br.w && ball.y>br.y && ball.y<br.y+br.h){
+        ball.dy=-ball.dy; br.alive=false; score+=10; document.getElementById('sc').textContent='Score: '+score;
+      }
+    }
+  }
+  draw();
+}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // ball
+  ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2); ctx.fillStyle='white'; ctx.fill();
+  // paddle
+  ctx.fillStyle='lightblue'; ctx.fillRect(paddle.x, canvas.height - paddle.h, paddle.w, paddle.h);
+  // bricks
+  for(let r=0;r<bricks.length;r++) for(let c=0;c<bricks[r].length;c++){
+    const br=bricks[r][c]; if(br.alive){ ctx.fillStyle='orange'; ctx.fillRect(br.x,br.y,br.w,br.h); }
+  }
+}
+init();
+function start(){ init(); }
+</script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+/* style.css (put in root) */
+body{font-family:Arial,helvetica,sans-serif;margin:0;padding:0;background:linear-gradient(120deg,#3b82f6,#9333ea);color:#fff}
+.container{max-width:900px;margin:40px auto;padding:20px;background:rgba(0,0,0,0.25);border-radius:12px;text-align:center}
+a.back{display:inline-block;margin-top:16px;color:#fff;text-decoration:none;opacity:.9}
+button, input {font-size:16px}

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Connect Four</title>
+<link rel="stylesheet" href="../style.css">
+<style>.board{display:grid;grid-template-columns:repeat(7,55px);gap:6px;justify-content:center;margin:12px auto}.cell{width:55px;height:55px;background:rgba(255,255,255,0.08);border-radius:50%;display:flex;align-items:center;justify-content:center}</style>
+</head>
+<body>
+<div class="container">
+  <h1>⚪ Connect Four</h1>
+  <div id="board" class="board"></div>
+  <div id="stat"></div>
+  <button onclick="restart()">Restart</button>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const rows=6, cols=7;
+let grid, current='R';
+const board=document.getElementById('board'), stat=document.getElementById('stat');
+function init(){
+  grid=Array.from({length:rows},()=>Array(cols).fill(null));
+  board.innerHTML='';
+  for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){
+    const div=document.createElement('div'); div.className='cell'; div.dataset.r=r; div.dataset.c=c;
+    div.addEventListener('click', ()=>drop(+div.dataset.c));
+    board.appendChild(div);
+  }
+  stat.textContent="Turn: "+current;
+}
+function drop(col){
+  for(let r=rows-1;r>=0;r--){
+    if(!grid[r][col]){ grid[r][col]=current; updateBoard(); if(checkWin(r,col)) return alert(current+' wins!'); current=current==='R'?'Y':'R'; stat.textContent='Turn: '+current; break;}
+  }
+}
+function updateBoard(){
+  Array.from(board.children).forEach(c=>{
+    const r=+c.dataset.r, col=+c.dataset.c;
+    c.style.background= grid[r][col] ? (grid[r][col]==='R'?'red':'yellow') : 'rgba(255,255,255,0.08)';
+  });
+}
+function checkWin(r,c){
+  const directions=[[0,1],[1,0],[1,1],[1,-1]];
+  const me=grid[r][c];
+  for(const [dr,dc] of directions){
+    let cnt=1;
+    for(let k=1;k<4;k++){ const rr=r+dr*k, cc=c+dc*k; if(rr<0||rr>=rows||cc<0||cc>=cols||grid[rr][cc]!==me) break; cnt++; }
+    for(let k=1;k<4;k++){ const rr=r-dr*k, cc=c-dc*k; if(rr<0||rr>=rows||cc<0||cc>=cols||grid[rr][cc]!==me) break; cnt++; }
+    if(cnt>=4) return true;
+  }
+  return false;
+}
+function restart(){ current='R'; init(); }
+init();
+</script>
+</body>
+</html>

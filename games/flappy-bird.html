@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Flappy Bird</title>
+<link rel="stylesheet" href="../style.css">
+<style>canvas{background:linear-gradient(#87ceeb,#4da0ff);display:block;margin:12px auto;border-radius:8px}</style>
+</head>
+<body>
+<div class="container">
+  <h1>🐦 Flappy</h1>
+  <canvas id="f" width="400" height="500"></canvas>
+  <div><button onclick="reset()">Restart</button> <span id="scr">Score: 0</span></div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const canvas=document.getElementById('f'), ctx=canvas.getContext('2d');
+let bird={x:80,y:250,vy:0}, pipes=[], gravity=0.6, gap=140, score=0, running=true, tick=0, id;
+function reset(){ bird={x:80,y:250,vy:0}; pipes=[]; score=0; running=true; document.getElementById('scr').textContent='Score: 0'; if(id) clearInterval(id); id=setInterval(loop,20);}
+canvas.addEventListener('click', ()=> bird.vy=-9);
+function loop(){
+  bird.vy+=gravity; bird.y+=bird.vy;
+  tick++;
+  if(tick%90===0){ let h = 80 + Math.random()*200; pipes.push({x:canvas.width,yTop:h}); }
+  // move pipes
+  for(let p of pipes) p.x-=2.5;
+  // remove offscreen
+  if(pipes.length && pipes[0].x < -60) { pipes.shift(); score++; document.getElementById('scr').textContent='Score: '+score; }
+  // collision
+  if(bird.y>canvas.height || bird.y<0) gameOver();
+  for(let p of pipes){
+    if(bird.x+18>p.x && bird.x< p.x+60){
+      if(bird.y< p.yTop || bird.y > p.yTop + gap) gameOver();
+    }
+  }
+  draw();
+}
+function gameOver(){ clearInterval(id); running=false; alert('Game Over! Score: '+score);}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // bird
+  ctx.fillStyle='yellow'; ctx.beginPath(); ctx.arc(bird.x,bird.y,12,0,Math.PI*2); ctx.fill();
+  // pipes
+  ctx.fillStyle='green';
+  for(let p of pipes){
+    // top
+    ctx.fillRect(p.x,0,60,p.yTop);
+    // bottom
+    ctx.fillRect(p.x,p.yTop+gap,60,canvas.height - (p.yTop+gap));
+  }
+}
+reset();
+</script>
+</body>
+</html>

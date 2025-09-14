@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Rock Paper Scissors</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.buttons button{margin:8px;padding:10px 16px;border-radius:8px;border:none;cursor:pointer}
+.results p{margin:6px 0}
+.scoreboard{margin-top:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>✊ Rock Paper Scissors ✌️</h1>
+  <p>Pick your move:</p>
+  <div class="buttons">
+    <button onclick="play('rock')">✊ Rock</button>
+    <button onclick="play('paper')">✋ Paper</button>
+    <button onclick="play('scissors')">✌️ Scissors</button>
+    <button onclick="resetScores()">Reset Scores</button>
+  </div>
+  <div class="results">
+    <p id="player">You: -</p>
+    <p id="computer">Computer: -</p>
+    <h2 id="result"></h2>
+  </div>
+  <div class="scoreboard">
+    <p>Player score: <span id="ps">0</span></p>
+    <p>Computer score: <span id="cs">0</span></p>
+  </div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+
+<script>
+let pScore=0, cScore=0;
+function play(p){
+  const choices=['rock','paper','scissors'];
+  const c = choices[Math.floor(Math.random()*3)];
+  document.getElementById('player').textContent='You: '+p;
+  document.getElementById('computer').textContent='Computer: '+c;
+  let res='';
+  if(p===c) res="It's a tie!";
+  else if((p==='rock'&&c==='scissors')||(p==='paper'&&c==='rock')||(p==='scissors'&&c==='paper')){
+    res='🎉 You win!'; pScore++;
+  } else { res='💻 Computer wins'; cScore++; }
+  document.getElementById('result').textContent=res;
+  document.getElementById('ps').textContent=pScore;
+  document.getElementById('cs').textContent=cScore;
+}
+function resetScores(){pScore=0;cScore=0;document.getElementById('ps').textContent=0;document.getElementById('cs').textContent=0;document.getElementById('result').textContent='';document.getElementById('player').textContent='You: -';document.getElementById('computer').textContent='Computer: -'}
+</script>
+</body>
+</html>

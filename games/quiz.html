@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Quiz Game</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="container">
+  <h1>📝 Quiz Game</h1>
+  <div id="qbox"></div>
+  <div id="choices"></div>
+  <div style="margin-top:10px"><button onclick="next()">Next</button></div>
+  <div id="score" style="margin-top:10px"></div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const questions=[
+  {q:'What is 2+2?', a:['3','4','5','2'], correct:1},
+  {q:'Capital of India?', a:['Delhi','Mumbai','Kolkata','Chennai'], correct:0},
+  {q:'JS stands for?', a:['JavaSuper','JustScript','JavaScript','JScript'], correct:2}
+];
+let idx=0, sc=0;
+function show(){
+  if(idx>=questions.length){ document.getElementById('qbox').textContent='Quiz Over'; document.getElementById('choices').innerHTML=''; document.getElementById('score').textContent='Score: '+sc+'/'+questions.length; return; }
+  document.getElementById('qbox').textContent=questions[idx].q;
+  const ch=document.getElementById('choices'); ch.innerHTML='';
+  questions[idx].a.forEach((opt,i)=>{
+    const btn=document.createElement('button'); btn.textContent=opt; btn.style.display='block'; btn.style.margin='8px auto';
+    btn.onclick=()=>{ if(i===questions[idx].correct) sc++; idx++; show(); };
+    ch.appendChild(btn);
+  });
+}
+function next(){ idx++; show(); }
+show();
+</script>
+</body>
+</html>

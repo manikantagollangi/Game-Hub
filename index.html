@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🎮 Mini Game Hub</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(120deg, #3b82f6, #9333ea);
+      color: white;
+      margin: 0;
+      padding: 0;
+      text-align: center;
+    }
+    h1 {
+      margin: 20px 0;
+    }
+    .games {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 30px;
+    }
+    .game-card {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 30px 10px;
+      border-radius: 15px;
+      text-decoration: none;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .game-card:hover {
+      background: rgba(0, 0, 0, 0.6);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <h1>🎮 Welcome to Mini Game Hub 🎮</h1>
+  <p>Select a game and start playing!</p>
+
+  <div class="games">
+    <a href="games/rock-paper-scissors.html" class="game-card">✊ Rock Paper Scissors</a>
+    <a href="games/tic-tac-toe.html" class="game-card">❌ Tic Tac Toe ⭕</a>
+    <a href="games/memory-flip.html" class="game-card">🃏 Memory Card Flip</a>
+    <a href="games/snake.html" class="game-card">🐍 Snake Game</a>
+    <a href="games/flappy-bird.html" class="game-card">🐦 Flappy Bird</a>
+    <a href="games/breakout.html" class="game-card">🟦 Breakout Ball</a>
+    <a href="games/ping-pong.html" class="game-card">🏓 Ping Pong</a>
+    <a href="games/guess-number.html" class="game-card">🔢 Guess the Number</a>
+    <a href="games/quiz.html" class="game-card">📝 Quiz Game</a>
+    <a href="games/hangman.html" class="game-card">🔠 Hangman</a>
+    <a href="games/dino-run.html" class="game-card">🦖 Dino Run</a>
+    <a href="games/maze.html" class="game-card">🌀 Maze Game</a>
+    <a href="games/typing-speed.html" class="game-card">⌨️ Typing Speed Test</a>
+    <a href="games/connect-four.html" class="game-card">⚪ Connect Four</a>
+    <a href="games/2048.html" class="game-card">🔲 2048 Puzzle</a>
+  </div>
+
+  <footer style="margin: 30px; font-size: 14px;">
+    Made with ❤️ by Mani
+  </footer>
+</body>
+</html>

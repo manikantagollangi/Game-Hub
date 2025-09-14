@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Guess the Number</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+<div class="container">
+  <h1>🔢 Guess the Number</h1>
+  <p>I'm thinking of a number between 1 and 100.</p>
+  <input id="guess" type="number" placeholder="Enter guess" />
+  <button onclick="check()">Guess</button>
+  <div id="msg" style="margin-top:10px"></div>
+  <div style="margin-top:8px"><button onclick="start()">New Game</button></div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+let secret, tries;
+function start(){ secret = Math.floor(Math.random()*100)+1; tries=0; document.getElementById('msg').textContent=''; document.getElementById('guess').value=''; }
+function check(){
+  const val = Number(document.getElementById('guess').value);
+  if(!val){ document.getElementById('msg').textContent='Enter a number!'; return; }
+  tries++;
+  if(val===secret) document.getElementById('msg').textContent=`Correct! You found it in ${tries} tries.`;
+  else if(val<secret) document.getElementById('msg').textContent='Too low!';
+  else document.getElementById('msg').textContent='Too high!';
+}
+start();
+</script>
+</body>
+</html>

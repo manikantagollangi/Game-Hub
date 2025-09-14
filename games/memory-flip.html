@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Memory Card Flip</title>
+<link rel="stylesheet" href="../style.css">
+<style>
+.grid{display:grid;grid-template-columns:repeat(4,110px);gap:12px;justify-content:center;margin:18px auto}
+.card{width:110px;height:110px;background:rgba(255,255,255,0.08);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;cursor:pointer;user-select:none}
+.card.flipped{background:#fff;color:#000}
+#moves{margin-top:12px}
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>🃏 Memory Card Flip</h1>
+  <div id="grid" class="grid"></div>
+  <div id="moves">Moves: 0</div>
+  <button onclick="reset()">Reset</button>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const icons=['🍎','🍌','🍇','🍓','🍒','🍉'];
+let deck=[], first=null, second=null, lock=false, moves=0, matches=0;
+const grid=document.getElementById('grid');
+function init(){
+  deck = icons.concat(icons).sort(()=>Math.random()-0.5);
+  grid.innerHTML='';
+  deck.forEach((v,i)=>{
+    const c=document.createElement('div');
+    c.className='card'; c.dataset.i=i; c.textContent='';
+    c.addEventListener('click',()=>flip(c,i));
+    grid.appendChild(c);
+  });
+  moves=0; matches=0; updateMoves();
+}
+function flip(el,i){
+  if(lock || el.classList.contains('flipped')) return;
+  el.classList.add('flipped'); el.textContent=deck[i];
+  if(!first) first={el,i}; else { second={el,i}; lock=true; moves++; updateMoves(); checkPair(); }
+}
+function checkPair(){
+  if(deck[first.i]===deck[second.i]){ matches++; first=second=null; lock=false; if(matches===icons.length) setTimeout(()=>alert('You won! Moves: '+moves),200); }
+  else setTimeout(()=>{ first.el.classList.remove('flipped'); first.el.textContent=''; second.el.classList.remove('flipped'); second.el.textContent=''; first=second=null; lock=false; },700);
+}
+function updateMoves(){document.getElementById('moves').textContent='Moves: '+moves}
+function reset(){ init(); }
+init();
+</script>
+</body>
+</html>

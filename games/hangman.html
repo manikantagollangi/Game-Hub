@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Hangman</title>
+<link rel="stylesheet" href="../style.css">
+<style>.word{letter-spacing:8px;font-size:1.6rem;margin:14px}</style>
+</head>
+<body>
+<div class="container">
+  <h1>🔠 Hangman</h1>
+  <div id="word" class="word"></div>
+  <div id="letters"></div>
+  <div id="status"></div>
+  <button onclick="start()">Restart</button>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const words=['javascript','manipulate','computer','hangman'];
+let secret, revealed, attempts;
+function start(){
+  secret = words[Math.floor(Math.random()*words.length)];
+  revealed = Array(secret.length).fill('_'); attempts=6;
+  document.getElementById('status').textContent='Attempts left: '+attempts;
+  render();
+}
+function render(){
+  document.getElementById('word').textContent=revealed.join(' ');
+  const letters=document.getElementById('letters'); letters.innerHTML='';
+  for(let i=97;i<123;i++){
+    const ch=String.fromCharCode(i);
+    const b=document.createElement('button'); b.textContent=ch; b.style.margin='4px';
+    b.onclick=()=> guess(ch,b);
+    letters.appendChild(b);
+  }
+}
+function guess(ch,btn){
+  btn.disabled=true;
+  if(secret.includes(ch)){
+    for(let i=0;i<secret.length;i++) if(secret[i]===ch) revealed[i]=ch;
+    if(!revealed.includes('_')) alert('You won!');
+  } else { attempts--; document.getElementById('status').textContent='Attempts left: '+attempts; if(attempts<=0) alert('You lost! Word: '+secret); }
+  document.getElementById('word').textContent=revealed.join(' ');
+}
+start();
+</script>
+</body>
+</html>

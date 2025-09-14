@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Dino Run</title>
+<link rel="stylesheet" href="../style.css">
+<style>canvas{display:block;margin:12px auto;background:#eaeaea;border-radius:8px}</style>
+</head>
+<body>
+<div class="container">
+  <h1>🦖 Dino Run (Space to jump)</h1>
+  <canvas id="d" width="600" height="150"></canvas>
+  <div><button onclick="start()">Start/Restart</button> <span id="sco">Score: 0</span></div>
+  <a class="back" href="../index.html">⬅ Back to Hub</a>
+</div>
+<script>
+const canvas=document.getElementById('d'), ctx=canvas.getContext('2d');
+let dino={x:50,y:110,vy:0,gr:1.2,jump:-15}, obs=[], score=0, id;
+function start(){ dino.y=110; dino.vy=0; obs=[]; score=0; document.getElementById('sco').textContent='Score: 0'; if(id) clearInterval(id); id=setInterval(loop,20);}
+document.addEventListener('keydown', e=>{ if(e.code==='Space' && dino.y>=110) dino.vy=dino.jump; });
+function loop(){
+  dino.vy+=dino.gr; dino.y+=dino.vy; if(dino.y>110) dino.y=110;
+  if(Math.random()<0.02) obs.push({x:canvas.width,y:120,w:20,h:30});
+  obs.forEach(o=> o.x-=6);
+  if(obs.length && obs[0].x < -30) { obs.shift(); score++; document.getElementById('sco').textContent='Score: '+score; }
+  // collision
+  for(let o of obs) if(o.x < dino.x+30 && o.x+o.w > dino.x && o.y < dino.y+30) { clearInterval(id); alert('Game Over! Score: '+score); }
+  draw();
+}
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  // ground
+  ctx.fillStyle='#888'; ctx.fillRect(0,140,canvas.width,10);
+  // dino
+  ctx.fillStyle='green'; ctx.fillRect(dino.x,dino.y-30,30,30);
+  // obstacles
+  ctx.fillStyle='brown'; obs.forEach(o=> ctx.fillRect(o.x,o.y-o.h,o.w,o.h));
+}
+start();
+</script>
+</body>
+</html>
